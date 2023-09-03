@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const dirTree = require("directory-tree");
+const path = require('path');
 const {exec} = require("child_process");
 const server = express();
 
@@ -18,30 +19,39 @@ server.post('/dir', (req, res) => {
     let {URI} = req.body;
     URI = `./server/data/${URI}`
     
-    fs.mkdir(URI,{recursive: true}, function(err) {
-        if (err) {
-            console.log(err)
-            res.send({message:"Failed to create directory"})
-        } else {
-            console.log("New directory successfully created.")
-            res.send({message:"New directory successfully created"})
-        }
+    const dirPath = URI;
+    
+    fs.mkdir(dirPath, { recursive: true }) // recursive:true creates parent directories if they don't exist
+    .then(() => {
+        res.send({message:"New directory successfully created"})
+        console.log(`Directory '${dirPath}' created successfully.`)
     })
+    .catch((err) => {
+        console.error('Error:', err)
+        res.send({message:"Failed to create directory"})
+    });
+    
 })
 server.post('/file', (req, res) => {
     let {URI,data} = req.body;
     
     URI = `./server/data/${URI}`
     
-    fs.writeFile(URI,data, function(err) {
+    const dirPath = path.dirname(URI);
+    console.log(dirPath);
+    fs.mkdirSync(dirPath, { recursive: true },(e)=> {if (e) console.log(e)}) // recursive:true creates parent directories if they don't exist
+    fs.writeFile(URI, data, (err)=>{
         if (err) {
-            console.log(err)
             res.send({message:"Failed to create file"})
-        } else {
-            console.log("New file successfully created.")
-            res.send({message:"New file successfully created"})
+            console.error('Error:', err)
         }
+        else {
+            res.send({message:"New file successfully created"})
+            console.log(`File '${URI}' created successfully.`)
+        }
+        
     })
+    
 })
 server.get('/tree', (req, res) => {
     let {URI} = req.query
@@ -58,7 +68,7 @@ server.get('/list', (req, res) => {
         files.push(file)
     });
     res.send({message: files})
-      
+    
 })
 server.post('/rmdir', (req, res) => {
     let {URI} = req.body
@@ -92,7 +102,7 @@ server.post('/rm', (req, res) => {
 server.get('/cat',(req, res) =>{
     let {URI} = req.query
     URI = `./server/data/${URI}`
-
+    
     fs.readFile(URI, (e, data) =>{
         if (e) {
             console.log(e)
@@ -119,11 +129,11 @@ server.post("/exec", (req, res) => {
             }
             console.log(stdout);
             res.send({message:stdout});
-
+            
         })
     }
     else {
         res.send({message:"incorrect key"});
     }
-
+    
 })
