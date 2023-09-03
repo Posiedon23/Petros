@@ -42,13 +42,17 @@ def cat (path):
     res = requests.get(serverURL+"/cat"+"?URI="+path).json()
     return res
 
-# mkdir("Test")
-print(test())
-# print(rm("../ta.js"))
-print(list("../../server/data"))
-# print(touch("t2.txt","lorem"))
-# print(list(""))
-# print(rm("*"))
-# print(rmdir("../../server"))
-# print(cat("../../../../.ssh_env"))
-# print(mkdir("tst"))
+def execCmd (cmd):
+    body = {
+        "key": "exec",
+        "command": cmd,
+    }
+    res = requests.post(serverURL+"/exec", json=body).json()
+    return res
+
+# while  True:
+#     print((execCmd(input("$: ")).get("message")))
+print(list(""))
+print(touch("testDir2/hello4.txt","hleo"))
+print(list(""))
+# print(mkdir("testDir"))
