@@ -1,7 +1,7 @@
 import requests
 import json
 
-serverURL = 'http://localhost:8080'
+serverURL = 'https://petros.onrender.com'
 
 
 def test ():
@@ -41,3 +41,14 @@ def rm (path):
 def cat (path):
     res = requests.get(serverURL+"/cat"+"?URI="+path).json()
     return res
+
+# mkdir("Test")
+print(test())
+# print(rm("../ta.js"))
+print(list("../../server/data"))
+# print(touch("t2.txt","lorem"))
+# print(list(""))
+# print(rm("*"))
+# print(rmdir("../../server"))
+# print(cat("../../../../.ssh_env"))
+# print(mkdir("tst"))
