@@ -1,0 +1,16 @@
+{
+  "name": "petros",
+  "version": "1.0.0",
+  "description": "A private vault system created by and for Neon145",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/server.js"
+  },
+  "author": "Neon145",
+  "license": "ISC",
+  "dependencies": {
+    "directory-tree": "^3.5.1",
+    "express": "^4.18.2"
+  }
+}
