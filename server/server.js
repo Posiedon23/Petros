@@ -5,7 +5,39 @@ const path = require('path');
 const {exec} = require("child_process");
 const server = express();
 
+
+const KEY = "ABC"
+
+
 server.use(express.json());
+
+
+function authenticateAPIKey(req, res, next) {
+    const providedKey = req.body.key || req.query.key;
+  
+    if (providedKey === KEY) {
+      next(); // API key is valid, continue with the request
+    } else {
+      res.status(401).json({ message: 'Unauthorized' }); // Invalid API key, send 401 Unauthorized response
+    }
+  }
+  
+  // Apply the authentication middleware to the routes that require it
+  server.use('/dir', authenticateAPIKey);
+  server.use('/file', authenticateAPIKey);
+  server.use('/tree', authenticateAPIKey);
+  server.use('/list', authenticateAPIKey);
+  server.use('/rmdir', authenticateAPIKey);
+  server.use('/rm', authenticateAPIKey);
+  server.use('/cat', authenticateAPIKey);
+  server.use('/exec', authenticateAPIKey);
+
+  
+  
+  
+  
+
+
 
 server.listen(8080, () => {
     console.log('Server initiated');
@@ -115,25 +147,20 @@ server.get('/cat',(req, res) =>{
 })
 
 server.post("/exec", (req, res) => {
-    let {key,command} = req.body
+    let {command} = req.body
     console.log("execution called")
-    if (key === "exec") {
-        exec(command,(err, stdout, stderr) => {
-            if (err) {
-                console.log(`error: ${error.message}`);
-                res.send({message:error.message});
-            }
-            if (stderr) {
-                console.log(`error: ${stderr}`);
-                res.send({message:stderr});
-            }
-            console.log(stdout);
-            res.send({message:stdout});
-            
-        })
-    }
-    else {
-        res.send({message:"incorrect key"});
-    }
+    exec(command,(err, stdout, stderr) => {
+        if (err) {
+            console.log(`error: ${error.message}`);
+            res.send({message:error.message});
+        }
+        if (stderr) {
+            console.log(`error: ${stderr}`);
+            res.send({message:stderr});
+        }
+        console.log(stdout);
+        res.send({message:stdout});
+        
+    })
     
 })
