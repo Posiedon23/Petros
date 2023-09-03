@@ -2,20 +2,6 @@ import requests
 import json
 import os
 
-def encrypt(text,s):
-    result = ""
-    # transverse the plain text
-    for i in range(len(text)):
-        char = text[i]
-        # Encrypt uppercase characters in plain text
-        
-        if (char.isupper()):
-            result += chr((ord(char) + s-65) % 26 + 65)
-        # Encrypt lowercase characters in plain text
-        else:
-            result += chr((ord(char) + s - 97) % 26 + 97)
-        return result
-
 serverURL = 'https://petros.onrender.com'
 KEY = "Lcml145"
 
@@ -90,9 +76,9 @@ def console():
     while True:
         print((execCmd(input("$: ")).get("message")))
 
-console()
+# console()
 
-# print(list("testDir3"))
+print(list(""))
 # print(mkdir("testDir2/hello"))
 # print(touch("testDir3/txt1.txt","asdf"))
 # print(list("testDir2"))

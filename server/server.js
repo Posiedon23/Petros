@@ -6,7 +6,7 @@ const {exec} = require("child_process");
 const server = express();
 
 
-const KEY = "ABC"
+const KEY = "Lcml145"
 
 
 server.use(express.json());
