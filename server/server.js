@@ -88,3 +88,18 @@ server.post('/rm', (req, res) => {
         }
     })
 })
+
+server.get('/cat',(req, res) =>{
+    let {URI} = req.query
+    URI = `./server/data/${URI}`
+
+    fs.readFile(URI, (e, data) =>{
+        if (e) {
+            console.log(e)
+            res.send({message:"Failed to read File"})
+        } else {
+            console.log("File successfully read.")
+            res.send({message:data.toString()})
+        }
+    })
+})
