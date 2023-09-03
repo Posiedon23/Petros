@@ -52,7 +52,8 @@ def execCmd (cmd):
 
 # while  True:
 #     print((execCmd(input("$: ")).get("message")))
-print(list(""))
-print(touch("testDir2/hello4.txt","hleo"))
-print(list(""))
+# print(list(""))
+# print(mkdir("testDir2/hello"))
+print(touch("testDir2/bye/txt1.txt","asdf"))
+# print(list("testDir2"))
 # print(mkdir("testDir"))
