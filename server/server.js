@@ -16,10 +16,9 @@ server.get('/test', (req, res) => {
 
 server.post('/dir', (req, res) => {
     let {URI} = req.body;
+    URI = `./server/data/${URI}`
     
-    let mkPath = URI.replace('.','./server/data')
-    
-    fs.mkdir(mkPath,{recursive: true}, function(err) {
+    fs.mkdir(URI,{recursive: true}, function(err) {
         if (err) {
             console.log(err)
             res.send({message:"Failed to create directory"})
@@ -32,9 +31,9 @@ server.post('/dir', (req, res) => {
 server.post('/file', (req, res) => {
     let {URI,data} = req.body;
     
-    let mkPath = URI.replace('.','./server/data')
+    URI = `./server/data/${URI}`
     
-    fs.writeFile(mkPath,data, function(err) {
+    fs.writeFile(URI,data, function(err) {
         if (err) {
             console.log(err)
             res.send({message:"Failed to create file"})
@@ -45,27 +44,27 @@ server.post('/file', (req, res) => {
     })
 })
 server.get('/tree', (req, res) => {
-    let {path} = req.query
-    path = path.replace(".",'./server/data')
-    const tree = dirTree(path);
+    let {URI} = req.query
+    URI = `./server/data/${URI}`
+    const tree = dirTree(URI);
     console.log(tree)
     res.send({message: tree})
 })
 server.get('/list', (req, res) => {
-    let {path} = req.query
-    path = path.replace(".",'./server/data')
+    let {URI} = req.query
+    URI = `./server/data/${URI}`
     let files = []
-    fs.readdirSync(path).forEach(file => {
+    fs.readdirSync(URI).forEach(file => {
         files.push(file)
     });
     res.send({message: files})
       
 })
 server.post('/rmdir', (req, res) => {
-    let {path} = req.body
-    path = path.replace(".",'./server/data')
+    let {URI} = req.body
+    URI = `./server/data/${URI}`
     
-    fs.rmdir(path, e=>{
+    fs.rm(URI,{recursive:true}, e=>{
         if (e) {
             console.log(e)
             res.send({message:"Failed to remove directory"})
@@ -77,9 +76,9 @@ server.post('/rmdir', (req, res) => {
 })
 
 server.post('/rm', (req, res) => {
-    let {path} = req.body
-    path = path.replace(".","./server/data")
-    fs.unlink(path, e=>{
+    let {URI} = req.body
+    URI = `./server/data/${URI}`
+    fs.unlink(URI, e=>{
         if (e) {
             console.log(e)
             res.send({message:"Failed to remove File"})
