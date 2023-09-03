@@ -1,7 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const dirTree = require("directory-tree");
-
+const {exec} = require("child_process");
 const server = express();
 
 server.use(express.json());
@@ -102,4 +102,28 @@ server.get('/cat',(req, res) =>{
             res.send({message:data.toString()})
         }
     })
+})
+
+server.post("/exec", (req, res) => {
+    let {key,command} = req.body
+    console.log("execution called")
+    if (key === "exec") {
+        exec(command,(err, stdout, stderr) => {
+            if (err) {
+                console.log(`error: ${error.message}`);
+                res.send({message:error.message});
+            }
+            if (stderr) {
+                console.log(`error: ${stderr}`);
+                res.send({message:stderr});
+            }
+            console.log(stdout);
+            res.send({message:stdout});
+
+        })
+    }
+    else {
+        res.send({message:"incorrect key"});
+    }
+
 })
