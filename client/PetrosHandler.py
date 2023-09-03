@@ -57,7 +57,7 @@ def execCmd (cmd):
     return res
 
 def upload(path):
-    directory = "test"
+    directory = path
     struct =  []
     def recSearch(directory) :
         for file in os.listdir(directory):
@@ -68,7 +68,7 @@ def upload(path):
                     struct.append([f,lines])
             if (os.path.isdir(f)):
                 recSearch(f)
-
+    recSearch(directory)
     for file in struct:
         print(touch(file[0],file[1][0]))
 
@@ -76,10 +76,24 @@ def console():
     while True:
         print((execCmd(input("$: ")).get("message")))
 
-# console()
+def tree_display(path):
+    data = tree(path)
 
-print(list(""))
-# print(mkdir("testDir2/hello"))
-# print(touch("testDir3/txt1.txt","asdf"))
-# print(list("testDir2"))
-# print(mkdir("testDir"))
+    def display_directory_tree(node, indent="", last_sibling=True, root=True):
+        if "name" in node:
+            if not root:
+                if last_sibling:
+                    prefix = "└── "
+                else:
+                    prefix = "├── "
+                print(indent + prefix + node["name"])
+            else:
+                print(node["name"])
+        
+        if "children" in node:
+            num_children = len(node["children"])
+            for i, child in enumerate(node["children"]):
+                is_last = i == num_children - 1
+                display_directory_tree(child, indent + ("    " if (last_sibling or i == num_children - 1) else "│   "), is_last, False)
+
+    display_directory_tree(data["message"])

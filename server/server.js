@@ -149,8 +149,8 @@ server.get('/cat',(req, res) =>{
 server.post("/exec", (req, res) => {
     let {command} = req.body
     console.log("execution called")
-    exec(command,(err, stdout, stderr) => {
-        if (err) {
+    exec(command,(error, stdout, stderr) => {
+        if (error) {
             console.log(`error: ${error.message}`);
             res.send({message:error.message});
         }
